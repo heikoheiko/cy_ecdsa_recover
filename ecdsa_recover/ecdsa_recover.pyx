@@ -132,6 +132,7 @@ cdef void set_mpz_from_long(mpz_t m, l):
     mm = Mpz(l)
     mpz_set(m, mm.z)
 
+
 ############################################
 cdef mpz_t mOne
 mpz_init_set_ui(mOne, 1)
@@ -417,7 +418,6 @@ def ecdsa_raw_recover(msghash, vrs):
     j2.py_multiply(s)
 
     j.add(j2)
-
     j.py_multiply(inv(r, N))
 
     Q = j.as_point()
