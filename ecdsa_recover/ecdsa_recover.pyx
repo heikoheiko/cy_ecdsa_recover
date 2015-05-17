@@ -196,20 +196,6 @@ cdef inv(a, n):
 
 
 
-from libc.stdlib cimport malloc, free
-cdef struct XYZ:
-    mpz_t x
-    mpz_t y
-    mpz_t z
-
-#cdef double *my_array = <double *>malloc(number * sizeof(double))
-cdef XYZ *cache = <XYZ *>malloc(1024 * sizeof(XYZ))
-for x in range(1024):
-    mpz_init(cache[x].x)
-    mpz_init(cache[x].y)
-    mpz_init(cache[x].z)
-
-
 
 cdef class Jacobian:
     cdef mpz_t x
@@ -367,9 +353,13 @@ cdef class Jacobian:
         cdef mpz_t m
         mpz_init(m)
         set_mpz_from_long(m, l)
-        self.multiply(m, 0)
+        self.multiply(m)
 
-    cdef void multiply(self, mpz_t n, int depth):
+    cdef void multiply(self, mpz_t n):
+        cdef mpz_t x
+        cdef mpz_t y
+        cdef mpz_t z
+
         if mpz_cmp(self.y, mNull) == zero or mpz_cmp(n, mNull) == zero:
             mpz_set(self.x, mNull)
             mpz_set(self.y, mNull)
@@ -381,22 +371,22 @@ cdef class Jacobian:
         elif mpz_cmp(n, mNull) < 0 or not (mpz_cmp(n, mN) < 0):
             # self.multiply(n % mN)
             mpz_mod(n, n, mN)
-            self.multiply(n, depth + 1)
+            self.multiply(n)
         # elif (n % 2) == 0:
         elif mpz_fdiv_ui(n, 2) == 0:
             mpz_fdiv_q(n, n, mTwo)
-            self.multiply(n, depth + 1)
+            self.multiply(n)
             self.jdouble()
         else:
             # elif (n % 2) == 1:
             #c = self.copy()
-            mpz_set(cache[depth].x, self.x)
-            mpz_set(cache[depth].y, self.y)
-            mpz_set(cache[depth].z, self.z)
+            mpz_init_set(x, self.x)
+            mpz_init_set(y, self.y)
+            mpz_init_set(z, self.z)
             mpz_fdiv_q(n, n, mTwo)
-            self.multiply(n, depth + 1)
+            self.multiply(n)
             self.jdouble()
-            self._add(cache[depth].x, cache[depth].y, cache[depth].z)
+            self._add(x, y, z)
 
 
 
@@ -481,8 +471,4 @@ def ecdsa_verify(msg, sig, pub):
 
 def ecdsa_recover(msg, sig):
     return encode_pubkey(ecdsa_raw_recover(electrum_sig_hash(msg), decode_sig(sig)), 'hex')
-
-
-cdef void initecdsa_recover():
-    pass
 
