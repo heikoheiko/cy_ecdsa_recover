@@ -432,7 +432,7 @@ def ecdsa_raw_verify(msghash, vrs, pub):
     w = inv(s, N)
     z = hash_to_int(msghash)
     u1, u2 = z*w % N, r*w % N
-
+    pub = decode_pubkey(pub)
     j = Jacobian()
     j.from_point(G)
     j.py_multiply(u1)
@@ -459,7 +459,7 @@ def ecdsa_raw_sign(msghash, priv):
 
 # wraper
 from bitcoin import electrum_sig_hash, decode_sig, encode_pubkey, encode_sig
-from bitcoin import decode_privkey, deterministic_generate_k
+from bitcoin import decode_privkey, deterministic_generate_k, decode_pubkey
 
 def ecdsa_sign(msg, priv):
     return encode_sig(*ecdsa_raw_sign(electrum_sig_hash(msg), priv))

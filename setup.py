@@ -17,7 +17,7 @@ version = '0.1.1'  # preserve format, this is read from __init__.py
 
 setup(
     ext_modules=cythonize(extensions, compiler_directives=compiler_directives),
-    name='ecdsa recover',
+    name='ecdsa_recover',
     version=version,
     description="faster implementation of ecdsa recover using cython + gmp",
     author="HeikoHeiko",
