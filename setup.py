@@ -7,13 +7,13 @@ from Cython.Distutils import build_ext
 extensions = [
     Extension("ecdsa_recover", ["ecdsa_recover/ecdsa_recover.pyx"],
               libraries=['gmp', 'm'],
-              extra_compile_args=['-O3']
+              extra_compile_args=['-O3', '-I/usr/include', '-I/usr/local/include']
               )
 ]
 compiler_directives = {}
 install_requires = ['bitcoin']
 
-version = '0.1.2'
+version = '0.1.4'
 
 setup(
     #ext_modules=cythonize(extensions, compiler_directives=compiler_directives),
