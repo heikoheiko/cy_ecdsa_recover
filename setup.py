@@ -13,7 +13,7 @@ extensions = [
 compiler_directives = {}
 install_requires = ['bitcoin']
 
-version = '0.1.4'
+version = '0.1.5'
 
 setup(
     #ext_modules=cythonize(extensions, compiler_directives=compiler_directives),

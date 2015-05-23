@@ -355,6 +355,7 @@ cdef class Jacobian:
         mpz_init(m)
         set_mpz_from_long(m, l)
         self.multiply(m)
+        mpz_clear(m)
 
     cdef void multiply(self, mpz_t n):
         cdef mpz_t x
@@ -380,7 +381,6 @@ cdef class Jacobian:
             self.jdouble()
         else:
             # elif (n % 2) == 1:
-            #c = self.copy()
             mpz_init_set(x, self.x)
             mpz_init_set(y, self.y)
             mpz_init_set(z, self.z)
@@ -388,8 +388,9 @@ cdef class Jacobian:
             self.multiply(n)
             self.jdouble()
             self._add(x, y, z)
-
-
+            mpz_clear(x)
+            mpz_clear(y)
+            mpz_clear(z)
 
 #############################################
 
