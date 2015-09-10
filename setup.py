@@ -11,7 +11,7 @@ compiler_directives = {}
 install_requires = ['bitcoin']
 setup_requires = ['cython']
 
-version = '0.1.5'
+version = '0.1.6'
 
 
 setup(
