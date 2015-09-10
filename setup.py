@@ -1,7 +1,4 @@
-from distutils.core import setup
-from distutils.extension import Extension
-from Cython.Build import cythonize
-from Cython.Distutils import build_ext
+from setuptools import setup, Extension
 
 
 extensions = [
@@ -12,13 +9,14 @@ extensions = [
 ]
 compiler_directives = {}
 install_requires = ['bitcoin']
+setup_requires = ['cython']
 
 version = '0.1.5'
+
 
 setup(
     #ext_modules=cythonize(extensions, compiler_directives=compiler_directives),
     ext_modules=extensions,
-    cmdclass={'build_ext': build_ext},
     name='ecdsa_recover',
     version=version,
     description="faster implementation of ecdsa recover using cython + gmp",
@@ -36,4 +34,5 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     install_requires=install_requires,
+    setup_requires=setup_requires,
 )
